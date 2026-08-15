@@ -7,7 +7,7 @@ export const statsContent = {
   },
   heading: { prefix: "Numbers that ", accent: "matter" },
   description:
-    "Not vanity. Real creative performance—built through strategy, content, design and consistent execution.",
+    "Not vanity. Real creative performance-built through strategy, content, design and consistent execution.",
   items: [
     {
       index: "01",

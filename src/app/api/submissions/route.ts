@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { prisma } from "@/lib/db/prisma";
+import { supabase } from "@/lib/db/supabase";
 import { createPublicSubmissionId, getClientIp, hashPrivateIdentifier, readJson } from "@/lib/http/request";
 import { serializeSubmission } from "@/lib/submissions";
 import { projectSubmissionSchema } from "@/lib/validation/submission";
@@ -54,23 +54,27 @@ export async function POST(request: Request) {
   }
 
   try {
-    const recentCount = await prisma.projectSubmission.count({
-      where: {
-        ipHash,
-        createdAt: { gte: new Date(Date.now() - RATE_LIMIT_WINDOW_MS) }
-      }
-    });
+    const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+    const { count, error: countError } = await supabase
+      .from("project_submissions")
+      .select("id", { count: "exact", head: true })
+      .eq("ip_hash", ipHash)
+      .gte("created_at", windowStart);
 
-    if (recentCount >= RATE_LIMIT_MAX) {
+    if (countError) throw countError;
+
+    if ((count ?? 0) >= RATE_LIMIT_MAX) {
       return NextResponse.json<ApiResponse<never>>(
         { ok: false, error: "Too many submissions. Please wait before trying again." },
         { status: 429, headers: { "Retry-After": "900" } }
       );
     }
 
-    const submission = await prisma.projectSubmission.create({
-      data: {
-        publicId: createPublicSubmissionId(),
+    const { data: submission, error: insertError } = await supabase
+      .from("project_submissions")
+      .insert({
+        id: crypto.randomUUID(),
+        public_id: createPublicSubmissionId(),
         name: parsed.data.name,
         brand: parsed.data.brand,
         email: parsed.data.email,
@@ -79,11 +83,14 @@ export async function POST(request: Request) {
         goal: parsed.data.goal,
         timeline: parsed.data.timeline,
         budget: parsed.data.budget,
-        projectDetails: parsed.data.projectDetails,
-        ipHash,
-        userAgent: request.headers.get("user-agent")?.slice(0, 500) || null
-      }
-    });
+        project_details: parsed.data.projectDetails,
+        ip_hash: ipHash,
+        user_agent: request.headers.get("user-agent")?.slice(0, 500) ?? null
+      })
+      .select()
+      .single();
+
+    if (insertError) throw insertError;
 
     const record = serializeSubmission(submission);
     const response: ApiResponse<Pick<ProjectSubmissionRecord, "publicId" | "createdAt">> = {

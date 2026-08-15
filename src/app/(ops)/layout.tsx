@@ -18,6 +18,6 @@ export const viewport: Viewport = {
   themeColor: siteContent.metadata.themeColor
 };
 
-export default function AdminLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function OpsLayout({ children }: Readonly<{ children: ReactNode }>) {
   return <html lang="en"><body>{children}</body></html>;
 }

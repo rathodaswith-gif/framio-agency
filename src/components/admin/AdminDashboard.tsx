@@ -75,10 +75,10 @@ export function AdminDashboard({ initialSubmissions, initialError = "" }: { init
   const refresh = async () => {
     setMessage("");
     try {
-      const response = await fetch("/api/admin/submissions", { cache: "no-store" });
+      const response = await fetch("/api/ops/submissions", { cache: "no-store" });
       const result = await response.json() as ApiResponse<ProjectSubmissionRecord[]>;
       if (!response.ok || !result.ok) {
-        if (response.status === 401) router.replace("/admin/login");
+        if (response.status === 401) router.replace("/ops/login");
         setMessage(adminContent.messages.loadFailed);
         return;
       }
@@ -89,8 +89,8 @@ export function AdminDashboard({ initialSubmissions, initialError = "" }: { init
   };
 
   const logout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" });
-    router.replace("/admin/login");
+    await fetch("/api/ops/logout", { method: "POST" });
+    router.replace("/ops/login");
     router.refresh();
   };
 
@@ -99,7 +99,7 @@ export function AdminDashboard({ initialSubmissions, initialError = "" }: { init
     setSaving(true);
     setMessage("");
     try {
-      const response = await fetch(`/api/admin/submissions/${active.id}`, {
+      const response = await fetch(`/api/ops/submissions/${active.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: activeStatus, adminNote: activeNote })
@@ -122,7 +122,7 @@ export function AdminDashboard({ initialSubmissions, initialError = "" }: { init
     if (!active || !window.confirm(adminContent.messages.deleteConfirm)) return;
     setMessage("");
     try {
-      const response = await fetch(`/api/admin/submissions/${active.id}`, { method: "DELETE" });
+      const response = await fetch(`/api/ops/submissions/${active.id}`, { method: "DELETE" });
       if (!response.ok) {
         setMessage(adminContent.messages.deleteFailed);
         return;
@@ -183,7 +183,7 @@ export function AdminDashboard({ initialSubmissions, initialError = "" }: { init
             <option value="ALL">{adminContent.controls.allStatuses}</option>
             {statusEntries.map(([value, label]) => <option value={value} key={value}>{label}</option>)}
           </select>
-          <a className="admin-btn" href={submissions.length ? "/api/admin/submissions/export" : undefined} onClick={(event) => {
+          <a className="admin-btn" href={submissions.length ? "/api/ops/submissions/export" : undefined} onClick={(event) => {
             if (!submissions.length) { event.preventDefault(); window.alert(adminContent.messages.noExport); }
           }}>{adminContent.controls.export}</a>
         </section>

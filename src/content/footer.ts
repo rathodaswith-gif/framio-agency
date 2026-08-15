@@ -7,7 +7,7 @@ export const footerContent = {
     "Performance marketing, high-status visuals and creative systems that feel sharp, bold and unforgettable.",
   primaryCta: "START A PROJECT",
   secondaryCta: "See our work",
-  brandNote: "Creative × Growth × AI — premium digital experiences built from Hyderabad.",
+  brandNote: "Creative × Growth × AI - premium digital experiences built from Hyderabad.",
   sectionsLabel: "Sections",
   contactLabel: "Contact",
   socialLabel: "Social",

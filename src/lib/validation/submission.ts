@@ -23,10 +23,22 @@ export const projectSubmissionSchema = z
       .array(z.string().trim())
       .min(1)
       .max(projectFormContent.services.options.length)
-      .refine((services) => services.every((service) => allowedServices.has(service))),
-    goal: z.string().trim().refine((goal) => allowedGoals.has(goal)),
-    timeline: z.string().trim().refine((timeline) => allowedTimelines.has(timeline)),
-    budget: z.string().trim().refine((budget) => allowedBudgets.has(budget)),
+      .refine(
+        (services) => services.every((service) => allowedServices.has(service)),
+        { error: "One or more selected services are invalid." }
+      ),
+    goal: z
+      .string()
+      .trim()
+      .refine((goal) => allowedGoals.has(goal), { error: "Please choose a valid goal." }),
+    timeline: z
+      .string()
+      .trim()
+      .refine((timeline) => allowedTimelines.has(timeline), { error: "Please choose a valid timeline." }),
+    budget: z
+      .string()
+      .trim()
+      .refine((budget) => allowedBudgets.has(budget), { error: "Please choose a valid budget range." }),
     projectDetails: z
       .string()
       .trim()

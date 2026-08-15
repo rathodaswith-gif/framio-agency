@@ -25,6 +25,13 @@ const initialForm: ProjectSubmissionInput = {
   companyWebsite: ""
 };
 
+// Defined at module level so they're stable references and never trigger
+// useEffect dependency size changes.
+const ALLOWED_SERVICES = new Set(projectFormContent.services.options.map((o) => o.value));
+const ALLOWED_GOALS = new Set<string>(projectFormContent.project.goal.options);
+const ALLOWED_TIMELINES = new Set<string>(projectFormContent.project.timeline.options);
+const ALLOWED_BUDGETS = new Set(projectFormContent.budget.options.map((o) => o.value));
+
 function FieldError({ message }: { message?: string }) {
   return <p className="brief-error" aria-live="polite">{message ?? ""}</p>;
 }
@@ -66,7 +73,27 @@ export function ProjectBriefForm() {
         const stored = window.localStorage.getItem(DRAFT_KEY);
         if (stored) {
           const draft = JSON.parse(stored) as Partial<Draft>;
-          setForm({ ...initialForm, ...draft, services: Array.isArray(draft.services) ? draft.services : [] });
+
+          // Only pick ProjectSubmissionInput fields - never let draft navigation
+          // keys (currentStep, furthestStep) bleed into the form state and get
+          // sent to the server, which would cause a .strict() schema rejection.
+          const services = Array.isArray(draft.services)
+            ? draft.services.filter((s) => ALLOWED_SERVICES.has(s))
+            : [];
+
+          setForm({
+            name: draft.name ?? "",
+            brand: draft.brand ?? "",
+            email: draft.email ?? "",
+            phone: draft.phone ?? "",
+            services,
+            goal: ALLOWED_GOALS.has(draft.goal ?? "") ? (draft.goal ?? "") : "",
+            timeline: ALLOWED_TIMELINES.has(draft.timeline ?? "") ? (draft.timeline ?? "") : "",
+            budget: ALLOWED_BUDGETS.has(draft.budget ?? "") ? (draft.budget ?? "") : "",
+            projectDetails: draft.projectDetails ?? "",
+            companyWebsite: draft.companyWebsite ?? ""
+          });
+
           const restored = Number.isInteger(draft.currentStep) ? Math.min(lastStep, Math.max(0, draft.currentStep ?? 0)) : 0;
           setCurrentStep(restored);
           setFurthestStep(Number.isInteger(draft.furthestStep) ? Math.min(lastStep, Math.max(restored, draft.furthestStep ?? restored)) : restored);

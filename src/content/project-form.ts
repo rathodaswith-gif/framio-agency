@@ -2,7 +2,7 @@ import type { ImageContent } from "@/types/content";
 
 export const projectFormContent = {
   metadata: {
-    title: "Start a Project — FRAMIO",
+    title: "Start a Project - FRAMIO",
     description:
       "Start a project with FRAMIO. Share your goals, scope and investment range in a focused five-step brief."
   },
@@ -75,7 +75,7 @@ export const projectFormContent = {
       {
         value: "Complete Marketing System",
         title: "Complete Marketing System",
-        description: "Strategy, content, creative and performance—connected",
+        description: "Strategy, content, creative and performance-connected",
         wide: true
       }
     ]
@@ -143,7 +143,7 @@ export const projectFormContent = {
       contact: "Contact",
       projectDetails: "Project"
     },
-    emptyValue: "—",
+    emptyValue: "-",
     valueSeparator: " • ",
     privacy: "Your information stays private and is used only to discuss your project."
   },

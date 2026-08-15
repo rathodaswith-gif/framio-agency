@@ -2,8 +2,8 @@ import type { ImageContent } from "@/types/content";
 
 export const siteContent = {
   metadata: {
-    title: "FRAMIO — Creative & Growth Agency",
-    description: "FRAMIO — a premium creative and growth marketing agency.",
+    title: "FRAMIO - Creative & Growth Agency",
+    description: "FRAMIO - a premium creative and growth marketing agency.",
     themeColor: "#050505"
   },
   brand: {
@@ -18,6 +18,7 @@ export const siteContent = {
   routes: {
     home: "/",
     startProject: "/start-project",
-    admin: "/admin"
+    ops: "/ops",
+    opsLogin: "/ops/login"
   }
 } as const;

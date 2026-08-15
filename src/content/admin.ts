@@ -6,19 +6,21 @@ export const adminContent = {
     description: "Secure FRAMIO project-submission management."
   },
   login: {
-    heading: { prefix: "Lead ", accent: "Desk" },
-    description: "Review project briefs, update lead status, add internal notes and export submissions.",
-    passwordLabel: "Admin Password",
-    passwordPlaceholder: "Enter password",
-    submitLabel: "Open Dashboard →",
-    submittingLabel: "Checking…",
-    invalidMessage: "Incorrect password. Try again.",
-    unavailableMessage: "Admin login is not configured. Check the server environment variables."
+    heading: { prefix: "Ops ", accent: "Desk" },
+    description: "Sign in with your admin account to review project briefs, update lead status, and export submissions.",
+    emailLabel: "Email",
+    emailPlaceholder: "admin@framio.in",
+    passwordLabel: "Password",
+    passwordPlaceholder: "••••••••",
+    submitLabel: "Sign in →",
+    submittingLabel: "Signing in…",
+    invalidMessage: "Invalid email or password.",
+    unavailableMessage: "Sign-in is unavailable. Check the server configuration."
   },
   header: {
-    brandName: "Lead Desk / Admin",
+    brandName: "Ops Desk / Admin",
     refresh: "Refresh",
-    logout: "Lock",
+    logout: "Sign out",
     website: "View Website ↗"
   },
   hero: {
@@ -38,7 +40,7 @@ export const adminContent = {
     export: "Export CSV ↓"
   },
   formatting: {
-    emptyValue: "—",
+    emptyValue: "-",
     leadSeparator: " · ",
     itemSeparator: ", ",
     detailSeparator: " • "
