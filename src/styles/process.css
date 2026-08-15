@@ -1,0 +1,519 @@
+/* =====================================================
+   FRAMIO PROCESS V32
+   One seamless route and one continuous blue traveller.
+====================================================== */
+
+.framio-process {
+  --process-blue: #1598ff;
+  --process-blue-soft: rgba(21, 152, 255, 0.34);
+  --process-cycle: 3s;
+  contain: paint;
+  scroll-margin-top: 88px;
+}
+
+@media (min-width: 769px) {
+  .framio-process {
+    min-height: auto;
+    padding: clamp(52px, 5.2vw, 74px) 24px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 18% 45%, rgba(111, 12, 43, 0.13), transparent 28rem),
+      radial-gradient(circle at 82% 54%, rgba(15, 76, 145, 0.055), transparent 24rem),
+      linear-gradient(180deg, #040404, #060506 48%, #040404);
+  }
+
+  .framio-process::before {
+    opacity: 0.11;
+  }
+
+  .framio-process::after {
+    top: 56%;
+    width: min(840px, 72vw);
+    opacity: 0.74;
+    filter: blur(42px);
+  }
+
+  .process-inner {
+    position: relative;
+    isolation: isolate;
+    width: min(1180px, 100%);
+    min-height: 590px;
+    margin: 0 auto;
+    padding: clamp(42px, 4vw, 58px) clamp(34px, 4.2vw, 58px) 34px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.105);
+    border-radius: 28px;
+    background:
+      linear-gradient(145deg, rgba(16, 12, 14, 0.96), rgba(5, 5, 5, 0.98) 56%, rgba(9, 6, 8, 0.97));
+    box-shadow:
+      0 40px 110px rgba(0, 0, 0, 0.40),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transform: translateZ(0);
+  }
+
+  .process-inner::before {
+    z-index: 0;
+    background:
+      linear-gradient(90deg, rgba(111, 13, 44, 0.22), rgba(76, 10, 31, 0.10) 34%, transparent 70%),
+      radial-gradient(circle, rgba(255, 255, 255, 0.11) 0.75px, transparent 1px);
+    background-size: 100% 100%, 9px 9px;
+    opacity: 0.56;
+    animation: none;
+    -webkit-mask-image: linear-gradient(90deg, #000, rgba(0, 0, 0, 0.78) 52%, transparent 96%);
+    mask-image: linear-gradient(90deg, #000, rgba(0, 0, 0, 0.78) 52%, transparent 96%);
+  }
+
+  .process-inner::after {
+    position: absolute;
+    z-index: 0;
+    top: 52%;
+    left: 50%;
+    width: min(760px, 72%);
+    aspect-ratio: 1.9;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(92, 9, 34, 0.14), transparent 68%);
+    content: "";
+    filter: blur(24px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .process-inner > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .process-intro {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .process-heading {
+    margin: 0;
+    font-size: clamp(39px, 4vw, 58px);
+    font-weight: 780;
+    letter-spacing: -0.062em;
+    line-height: 0.98;
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+    white-space: nowrap;
+  }
+
+  .process-copy {
+    max-width: 610px;
+    margin: 14px auto 0;
+    color: rgba(245, 241, 238, 0.58);
+    font-size: clamp(13px, 1.05vw, 15px);
+    line-height: 1.58;
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+
+  .framio-process.is-visible .process-heading {
+    animation: processV30Reveal 780ms 80ms var(--ease-premium) forwards;
+  }
+
+  .framio-process.is-visible .process-copy {
+    animation: processV30Reveal 720ms 180ms var(--ease-premium) forwards;
+  }
+
+  .process-map {
+    position: relative;
+    min-height: 410px;
+    margin-top: 0;
+  }
+
+  .process-orbit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform: none;
+  }
+
+  .process-link {
+    fill: none;
+    opacity: 1;
+    stroke: rgba(255, 255, 255, 0.29);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .process-flow {
+    fill: none;
+    opacity: 0;
+    stroke: #24a7ff;
+    stroke-width: 4.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 0.105 0.895;
+    stroke-dashoffset: 0;
+    filter:
+      drop-shadow(0 0 2px rgba(188, 231, 255, 1))
+      drop-shadow(0 0 7px rgba(36, 167, 255, 0.98))
+      drop-shadow(0 0 18px rgba(21, 152, 255, 0.72))
+      drop-shadow(0 0 34px rgba(21, 152, 255, 0.34));
+    pointer-events: none;
+  }
+
+  /* Neutralize every older layered animation before enabling V32. */
+  .framio-process.is-visible .process-flow {
+    animation: none;
+  }
+
+  .framio-process.is-visible.is-process-running .process-flow--continuous {
+    animation: processV32ContinuousFlow var(--process-cycle) linear infinite;
+  }
+
+  .process-origin {
+    fill: var(--process-blue);
+    opacity: 0.34;
+    filter:
+      drop-shadow(0 0 4px rgba(36, 167, 255, 1))
+      drop-shadow(0 0 13px rgba(21, 152, 255, 0.74));
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .framio-process.is-visible.is-process-running .process-origin {
+    animation: processV32OriginPulse var(--process-cycle) linear infinite;
+  }
+
+  .process-node {
+    position: absolute;
+    z-index: 5;
+    min-width: 160px;
+    padding: 10px 13px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    color: var(--white);
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, -50%) translate3d(0, 18px, 0) scale(0.97);
+    transition:
+      color 460ms var(--ease-premium),
+      border-color 460ms var(--ease-premium),
+      background 460ms var(--ease-premium),
+      box-shadow 460ms var(--ease-premium);
+  }
+
+  .framio-process.is-visible .process-node {
+    animation: processV30NodeIn 680ms 620ms var(--ease-premium) forwards;
+  }
+
+  .framio-process.is-visible .process-node--top {
+    animation-delay: 730ms;
+  }
+
+  .framio-process.is-visible .process-node--center {
+    animation-delay: 840ms;
+  }
+
+  .framio-process.is-visible .process-node--bottom {
+    animation-delay: 950ms;
+  }
+
+  .framio-process.is-visible .process-node--right {
+    animation-delay: 1060ms;
+  }
+
+  .process-node small {
+    display: block;
+    margin-bottom: 5px;
+    color: rgba(245, 241, 238, 0.34);
+    font-size: 8px;
+    font-weight: 760;
+    letter-spacing: 0.16em;
+    transition: color 420ms ease;
+  }
+
+  .process-node span {
+    display: block;
+    color: rgba(245, 241, 238, 0.68);
+    font-size: clamp(14px, 1.16vw, 17px);
+    font-weight: 590;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    transition: color 420ms ease, transform 460ms var(--ease-premium);
+  }
+
+  .process-node em,
+  .process-node strong {
+    display: block;
+    margin-top: 3px;
+    color: rgba(245, 241, 238, 0.78);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(20px, 1.7vw, 27px);
+    font-style: italic;
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    transition:
+      color 420ms ease,
+      text-shadow 420ms ease,
+      transform 460ms var(--ease-premium);
+  }
+
+  .process-node--left {
+    top: 50%;
+    left: 7%;
+  }
+
+  .process-node--top {
+    top: 15%;
+    left: 50%;
+  }
+
+  .process-node--center {
+    top: 50%;
+    left: 50%;
+    min-width: 230px;
+  }
+
+  .process-node--center span {
+    font-size: clamp(16px, 1.35vw, 20px);
+  }
+
+  .process-node--center strong {
+    color: rgba(245, 241, 238, 0.86);
+    font-family: Inter, Manrope, "Helvetica Neue", Arial, sans-serif;
+    font-size: clamp(23px, 2vw, 31px);
+    font-style: normal;
+    font-weight: 780;
+    letter-spacing: -0.055em;
+  }
+
+  .process-node--bottom {
+    top: 85%;
+    left: 50%;
+  }
+
+  .process-node--right {
+    top: 50%;
+    left: 93%;
+  }
+
+  .process-node--right span,
+  .process-node--right em {
+    color: rgba(233, 255, 26, 0.80);
+  }
+
+  .process-node.is-active {
+    border-color: rgba(21, 152, 255, 0.18);
+    background: radial-gradient(circle at 50% 100%, rgba(21, 152, 255, 0.10), transparent 72%);
+    box-shadow: 0 0 36px rgba(21, 152, 255, 0.055);
+  }
+
+  .process-node.is-active small {
+    color: var(--process-blue);
+  }
+
+  .process-node.is-active span {
+    color: rgba(255, 255, 255, 0.94);
+    transform: translate3d(0, -1px, 0);
+  }
+
+  .process-node.is-active em,
+  .process-node.is-active strong {
+    color: #fff;
+    text-shadow: 0 0 24px rgba(21, 152, 255, 0.18);
+    transform: translate3d(0, -1px, 0);
+  }
+
+  .process-node--right.is-active {
+    border-color: rgba(233, 255, 26, 0.18);
+    background: radial-gradient(circle at 50% 100%, rgba(233, 255, 26, 0.08), transparent 72%);
+    box-shadow: 0 0 38px rgba(233, 255, 26, 0.045);
+  }
+
+  .process-node--right.is-active small,
+  .process-node--right.is-active span,
+  .process-node--right.is-active em {
+    color: var(--yellow);
+    text-shadow: 0 0 24px rgba(233, 255, 26, 0.14);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 980px) {
+  .process-intro {
+    max-width: 680px;
+  }
+
+  .process-heading {
+    white-space: normal;
+  }
+
+  .process-inner {
+    min-height: 560px;
+    padding-inline: 30px;
+  }
+
+  .process-map {
+    min-height: 390px;
+  }
+
+  .process-orbit {
+    width: min(790px, 84%);
+  }
+
+  .process-node--left {
+    left: 9%;
+  }
+
+  .process-node--right {
+    left: 91%;
+  }
+}
+
+@media (max-width: 768px) {
+  .framio-process {
+    contain: paint;
+  }
+
+  .framio-process::before,
+  .mobile-process-step__card::before {
+    animation: none;
+  }
+
+  .mobile-process-rail__fill {
+    background: linear-gradient(180deg, #135cae 0%, var(--process-blue) 52%, var(--yellow) 100%);
+    box-shadow:
+      0 0 12px rgba(21, 152, 255, 0.42),
+      0 0 22px rgba(233, 255, 26, 0.08);
+  }
+
+  .mobile-process-step.is-active .mobile-process-step__node {
+    border-color: rgba(21, 152, 255, 0.46);
+    box-shadow:
+      0 0 0 5px rgba(5, 5, 7, 0.92),
+      0 0 20px rgba(21, 152, 255, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-process-step.is-active .mobile-process-step__node::after {
+    background: var(--process-blue);
+    box-shadow:
+      0 0 10px rgba(21, 152, 255, 0.76),
+      0 0 18px rgba(21, 152, 255, 0.25);
+  }
+
+  .mobile-process-step.is-active .mobile-process-step__status i {
+    background: linear-gradient(90deg, var(--process-blue), var(--yellow));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .framio-process .process-flow {
+    animation: none !important;
+    opacity: 0 !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .framio-process .process-heading,
+  .framio-process .process-copy,
+  .framio-process .process-node,
+  .framio-process .process-link {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .framio-process .process-link {
+    stroke-dashoffset: 0 !important;
+  }
+
+  .framio-process .process-origin {
+    animation: none !important;
+    opacity: 0.52 !important;
+    transform: none !important;
+  }
+
+  .framio-process .process-node {
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+@keyframes processV30Reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes processV30NodeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate3d(0, 18px, 0) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes processV32ContinuousFlow {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+  }
+
+  2% {
+    opacity: 1;
+  }
+
+  20% {
+    stroke-dashoffset: -0.27;
+  }
+
+  40% {
+    stroke-dashoffset: -0.42;
+  }
+
+  60% {
+    stroke-dashoffset: -0.565;
+  }
+
+  80% {
+    stroke-dashoffset: -0.835;
+  }
+
+  97% {
+    opacity: 1;
+    stroke-dashoffset: -0.895;
+  }
+
+  100% {
+    opacity: 0;
+    stroke-dashoffset: -0.895;
+  }
+}
+
+@keyframes processV32OriginPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1.65);
+  }
+
+  5%,
+  95% {
+    opacity: 0.58;
+    transform: scale(1.2);
+  }
+
+  12%,
+  88% {
+    opacity: 0.34;
+    transform: scale(1);
+  }
+}

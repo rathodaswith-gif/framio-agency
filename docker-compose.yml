@@ -1,0 +1,5 @@
+# This project uses Supabase instead of a local PostgreSQL container.
+# Create and configure the project in the Supabase dashboard or via the CLI,
+# then set the connection strings in your environment file.
+
+services: {}

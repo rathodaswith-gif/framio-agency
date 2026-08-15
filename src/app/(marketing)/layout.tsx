@@ -1,0 +1,24 @@
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
+
+import { siteContent } from "@/content/site";
+import "@/styles/home.css";
+import "@/styles/services.css";
+import "@/styles/founders.css";
+import "@/styles/process.css";
+
+export const metadata: Metadata = {
+  title: siteContent.metadata.title,
+  description: siteContent.metadata.description,
+  icons: { icon: siteContent.brand.logo.src }
+};
+
+export const viewport: Viewport = {
+  themeColor: siteContent.metadata.themeColor,
+  width: "device-width",
+  initialScale: 1
+};
+
+export default function MarketingLayout({ children }: Readonly<{ children: ReactNode }>) {
+  return <html lang="en"><body>{children}</body></html>;
+}
