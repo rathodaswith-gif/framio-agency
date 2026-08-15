@@ -1,4 +1,4 @@
-# FRAMIO Full-Stack Website
+# FRAMIO Website
 
 Production-ready Next.js, TypeScript, Prisma and Supabase rebuild of the FRAMIO website. The existing visual design, colours, animations, section order, responsive behaviour and interaction patterns are preserved, while all editable content is separated from component logic.
 
