@@ -27,10 +27,10 @@ const initialForm: ProjectSubmissionInput = {
 
 // Defined at module level so they're stable references and never trigger
 // useEffect dependency size changes.
-const ALLOWED_SERVICES = new Set(projectFormContent.services.options.map((o) => o.value));
+const ALLOWED_SERVICES = new Set<string>(projectFormContent.services.options.map((o) => o.value));
 const ALLOWED_GOALS = new Set<string>(projectFormContent.project.goal.options);
 const ALLOWED_TIMELINES = new Set<string>(projectFormContent.project.timeline.options);
-const ALLOWED_BUDGETS = new Set(projectFormContent.budget.options.map((o) => o.value));
+const ALLOWED_BUDGETS = new Set<string>(projectFormContent.budget.options.map((o) => o.value));
 
 function FieldError({ message }: { message?: string }) {
   return <p className="brief-error" aria-live="polite">{message ?? ""}</p>;
