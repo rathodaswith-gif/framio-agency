@@ -13,14 +13,14 @@ export const footerContent = {
   socialLabel: "Social",
   contact: {
     email: "framioagency.india@gmail.com",
-    phoneDisplay: "+91 94940 29070",
-    phoneHref: "+919494029070",
+    phoneDisplay: "+91 95028 06167",
+    phoneHref: "+919502806167",
     location: "Hyderabad / India"
   },
   socials: [
     {
       label: "Instagram",
-      href: "https://www.instagram.com/framioagency.india/",
+      href: "https://www.instagram.com/weareframio?igsi=ZnlteDJjNGg1d2R1",
       ariaLabel: "Open FRAMIO on Instagram",
       external: true,
       icon: "instagram",
@@ -28,7 +28,7 @@ export const footerContent = {
     },
     {
       label: "WhatsApp",
-      href: "https://wa.me/919494029070?text=Hi%20FRAMIO%2C%20I%27d%20like%20to%20discuss%20a%20project.",
+      href: "https://wa.link/qf1x0u.",
       ariaLabel: "Message FRAMIO on WhatsApp",
       external: true,
       icon: "whatsapp",
@@ -44,5 +44,4 @@ export const footerContent = {
     }
   ] satisfies SocialLinkContent[],
   copyright: "© 2026 FRAMIO",
-  closingLine: "Designed with cinematic intent"
 } as const;
