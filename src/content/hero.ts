@@ -13,7 +13,7 @@ export const heroContent = {
   script: "not just a",
   title: "Marketing Agency",
   description:
-    "We combine strategy, powerful content, performance marketing and AI - driven creativity to build brands people remember - and businesses that grow.",
+    "We combine strategy, powerful content, performance marketing and AI - driven creativity to build brands people remember-and businesses that grow.",
   primaryCta: "START A PROJECT",
   secondaryCta: "VIEW OUR WORK",
   servicesAriaLabel: "FRAMIO services",
