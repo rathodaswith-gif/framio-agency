@@ -43,5 +43,6 @@ export const footerContent = {
       className: "is-linkedin"
     }
   ] satisfies SocialLinkContent[],
+  closingLine: "PAN INDIA",
   copyright: "© 2026 FRAMIO",
 } as const;
