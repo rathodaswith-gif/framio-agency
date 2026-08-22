@@ -3,7 +3,6 @@ import { MobileMenu } from "@/components/layout/MobileMenu";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { BrandsSection } from "@/components/sections/BrandsSection";
-import { FoundersSection } from "@/components/sections/FoundersSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { PortfolioSection } from "@/components/sections/PortfolioSection";
 import { ProcessSection } from "@/components/sections/ProcessSection";
@@ -20,7 +19,6 @@ export default function HomePage() {
         <ServicesSection />
         <StatsSection />
         <PortfolioSection />
-        <FoundersSection />
         <BrandsSection />
         <SiteFooter />
       </main>
