@@ -1,7 +1,7 @@
 import type { SocialLinkContent } from "@/types/content";
 
 export const footerContent = {
-  backgroundImage: "/assets/images/footer/footer-spider.webp" as const,
+  backgroundImage: "/assets/images/footer/footer-framio.svg" as const,
   heading: { prefix: "Build a brand with ", accent: "hero energy" },
   description:
     "Performance marketing, high-status visuals and creative systems that feel sharp, bold and unforgettable.",
