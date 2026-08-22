@@ -54,10 +54,10 @@ export const projectFormContent = {
     description:
       "Share the essentials. We’ll use these details only to discuss your project and recommend the right next step.",
     fields: {
-      name: { label: "Your name", placeholder: "Rathod Asvith" },
+      name: { label: "Your name", placeholder: "Enter your name" },
       brand: { label: "Brand / company", placeholder: "Your brand name" },
       email: { label: "Email address", placeholder: "you@brand.com" },
-      phone: { label: "Phone number", placeholder: "+91 98765 43210" }
+      phone: { label: "Phone number", placeholder: "+91 0000000000" }
     }
   },
   services: {
