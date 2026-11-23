@@ -31,49 +31,13 @@ export function HomeExperience() {
     const menuToggle = document.querySelector<HTMLButtonElement>("#menuToggle");
     const menuLabel = document.querySelector<HTMLElement>("#menuLabel");
     const mobileMenu = document.querySelector<HTMLElement>("#mobileMenu");
-    const speedLines = document.querySelector<HTMLElement>("#speedLines");
-    if (!header || !hero || !menuToggle || !menuLabel || !mobileMenu || !speedLines) return;
+    if (!header || !hero || !menuToggle || !menuLabel || !mobileMenu) return;
 
     let menuOpen = false;
     let lastScrollY = window.scrollY;
     let headerScrollFrame = 0;
-    let resizeTimer = 0;
 
     const loadFrame = window.requestAnimationFrame(() => body.classList.add("is-loaded"));
-
-    const createSpeedLines = () => {
-      speedLines.replaceChildren();
-      const mobile = window.innerWidth < 700;
-      const count = mobile ? 18 : 50;
-      const fragment = document.createDocumentFragment();
-      for (let index = 0; index < count; index += 1) {
-        const line = document.createElement("span");
-        const angle = (360 / count) * index + (Math.random() * 7 - 3.5);
-        const radius = mobile ? 18 + Math.random() * 31 : 21 + Math.random() * 36;
-        const length = mobile ? 9 + Math.random() * 24 : 12 + Math.random() * 42;
-        const travel = mobile ? 14 + Math.random() * 25 : 18 + Math.random() * 42;
-        const opacity = mobile ? 0.16 + Math.random() * 0.28 : 0.15 + Math.random() * 0.38;
-        const duration = 1.15 + Math.random() * 1.65;
-        line.className = "speed-line";
-        if (index % 11 === 0) line.classList.add("is-yellow");
-        else if (index % 7 === 0) line.classList.add("is-wine");
-        line.style.setProperty("--angle", `${angle}deg`);
-        line.style.setProperty("--radius", `${radius}vmin`);
-        line.style.setProperty("--length", `${length}px`);
-        line.style.setProperty("--travel", `${travel}px`);
-        line.style.setProperty("--line-opacity", opacity.toFixed(2));
-        line.style.setProperty("--duration", `${duration.toFixed(2)}s`);
-        line.style.setProperty("--delay", `${(-Math.random() * duration).toFixed(2)}s`);
-        fragment.appendChild(line);
-      }
-      speedLines.appendChild(fragment);
-    };
-    const handleResize = () => {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(createSpeedLines, 180);
-    };
-    createSpeedLines();
-    window.addEventListener("resize", handleResize, { passive: true });
 
     const setMenu = (open: boolean) => {
       menuOpen = open;
@@ -174,10 +138,8 @@ export function HomeExperience() {
       window.cancelAnimationFrame(loadFrame);
       if (headerScrollFrame) window.cancelAnimationFrame(headerScrollFrame);
       if (mobileFrame) window.cancelAnimationFrame(mobileFrame);
-      window.clearTimeout(resizeTimer);
       body.classList.remove("is-loaded", "menu-open");
       root.classList.remove("menu-open");
-      window.removeEventListener("resize", handleResize);
       menuToggle.removeEventListener("click", handleMenuToggle);
       menuLinks.forEach((link) => link.removeEventListener("click", handleMenuLink));
       document.removeEventListener("keydown", handleEscape);

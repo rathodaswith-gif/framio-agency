@@ -76,6 +76,19 @@ export interface WorkReelContent {
   };
 }
 
+export interface HeroClipContent {
+  /** Client or project name shown in the viewfinder, e.g. "Terrace 35". */
+  name: string;
+  /** Kind of piece, e.g. "Real estate reel". */
+  format: string;
+  video: {
+    /** Short (about 6 s) vertical MP4 in /public/assets/videos/hero, no audio. */
+    src: AssetPath;
+    /** First frame as a JPG; shown before the clip plays and for reduced motion. */
+    poster: AssetPath;
+  };
+}
+
 export interface FounderRoleContent {
   index: string;
   name: string;
