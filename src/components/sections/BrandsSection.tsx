@@ -1,45 +1,67 @@
 import Image from "next/image";
+import Link from "next/link";
+import type { CSSProperties } from "react";
 
 import { brandsContent } from "@/content/brands";
-import type { BrandContent } from "@/types/content";
+import { siteContent } from "@/content/site";
 
-function BrandRow({ items, label, reverse = false }: { items: readonly BrandContent[]; label: string; reverse?: boolean }) {
-  const repeated = [...items, ...items];
+function FrameCorners() {
   return (
-    <div className={`brand-row${reverse ? " brand-row--reverse" : ""}`} aria-label={label}>
-      <div className="brand-track">
-        {repeated.map((brand, index) => {
-          const duplicate = index >= items.length;
-          return (
-            <div className="brand-tile" aria-hidden={duplicate || undefined} key={`${brand.name}-${index}`}>
-              <Image {...brand.image} alt={duplicate ? "" : brand.image.alt} sizes="(max-width: 680px) 46vw, 260px" />
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <span className="fx-corners" aria-hidden="true">
+      <i /><i /><i /><i />
+    </span>
   );
 }
 
 export function BrandsSection() {
-  const reverseItems = [...brandsContent.items].reverse();
   return (
-    <section className="brands-showcase" id="about" aria-labelledby="brandsTitle">
-      <div className="brands-shell">
-        <div className="brands-head">
-          <div>
-            <h2 className="brands-title" id="brandsTitle">{brandsContent.heading}</h2>
-            <p className="brands-copy">{brandsContent.description}</p>
-          </div>
-        </div>
+    <section className="fx-brands" id="brands" aria-labelledby="brandsTitle" data-brand-wall>
+      <div className="fx-shell fx-brands__head">
+        <h2 className="fx-title" id="brandsTitle" data-fx-reveal>{brandsContent.heading}</h2>
+        <p className="fx-lede" data-fx-reveal>{brandsContent.description}</p>
+      </div>
 
-        <div className="brands-stage">
-          <div className="brands-panel-glow" aria-hidden="true" />
-          <div className="brands-panel-core">
-            <BrandRow items={brandsContent.items} label={brandsContent.rowOneAriaLabel} />
-            <BrandRow items={reverseItems} label={brandsContent.rowTwoAriaLabel} reverse />
-          </div>
-        </div>
+      <div className="fx-brands__stage" data-brand-stage>
+        <ul className="fx-brands__wall" aria-label={brandsContent.wallLabel} data-brand-plane>
+          {brandsContent.items.map((brand, index) => (
+            <li
+              className="fx-plate"
+              style={{ "--plate-bg": brand.background, "--i": index } as CSSProperties}
+              data-brand-plate
+              key={brand.name}
+            >
+              <div className="fx-plate__body">
+                <span className="fx-plate__sheen" aria-hidden="true" />
+                <Image
+                  className="fx-plate__logo fx-plate__logo--mono"
+                  {...brand.mono}
+                  alt={brand.mono.alt}
+                  sizes="(max-width: 700px) 40vw, 220px"
+                />
+                <Image
+                  className="fx-plate__logo fx-plate__logo--color"
+                  {...brand.color}
+                  alt=""
+                  aria-hidden="true"
+                  sizes="(max-width: 700px) 40vw, 220px"
+                />
+              </div>
+              <FrameCorners />
+            </li>
+          ))}
+
+          <li className="fx-plate fx-plate--cta" style={{ "--i": brandsContent.items.length } as CSSProperties} data-brand-plate>
+            <Link className="fx-plate__body" href={siteContent.routes.startProject} aria-label={brandsContent.cta.ariaLabel}>
+              <span className="fx-plate__cta-title">{brandsContent.cta.title}</span>
+              <span className="fx-plate__cta-text">{brandsContent.cta.description}</span>
+              <span className="fx-plate__cta-arrow" aria-hidden="true">
+                <svg viewBox="0 0 20 20" focusable="false"><path d="M6 14 14 6M8 6h6v6" /></svg>
+              </span>
+            </Link>
+            <FrameCorners />
+          </li>
+        </ul>
+        <div className="fx-brands__floor" aria-hidden="true" />
       </div>
     </section>
   );

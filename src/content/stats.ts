@@ -1,46 +1,39 @@
 import type { StatContent } from "@/types/content";
 
+/**
+ * "Numbers that matter". Each number rolls into place on 3D counter drums.
+ * Change `value` and `suffix` to update a stat; mark one item `featured`.
+ */
 export const statsContent = {
-  artImages: {
-    red: "/assets/images/stats/numbers-sunburst-red.jpg",
-    blue: "/assets/images/stats/numbers-sunburst-blue.jpg"
-  },
-  heading: { prefix: "Numbers that ", accent: "matter" },
+  heading: "Numbers that matter",
   description:
-    "Not vanity. Real creative performance-built through strategy, content, design and consistent execution.",
+    "Not vanity metrics. Results built through strategy, content, design and consistent execution.",
+  panelLabel: "FRAMIO in numbers",
   items: [
     {
-      index: "01",
       value: 12,
       suffix: "+",
       label: "Brands",
-      description: "Built with ambitious teams across growing categories.",
-      art: "red"
+      description: "Built with ambitious teams across growing categories."
     },
     {
-      index: "02",
       value: 150,
       suffix: "+",
       label: "Creatives",
-      description: "Visuals, campaigns and content systems delivered.",
-      art: "blue"
+      description: "Visuals, campaigns and content systems delivered."
     },
     {
-      index: "03",
       value: 3,
       suffix: "M+",
       label: "Reach",
       description: "Attention generated through content and campaigns.",
-      art: "red",
       featured: true
     },
     {
-      index: "04",
       value: 5,
       suffix: "+",
       label: "Industries",
-      description: "From real estate and education to consumer brands.",
-      art: "blue"
+      description: "From real estate and education to consumer brands."
     }
   ] satisfies StatContent[],
   captions: ["Strategy", "Creative", "Performance"]

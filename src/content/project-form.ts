@@ -1,5 +1,3 @@
-import type { ImageContent } from "@/types/content";
-
 export const projectFormContent = {
   metadata: {
     title: "Start a Project - FRAMIO",
@@ -13,7 +11,6 @@ export const projectFormContent = {
     backLabel: "Back to website"
   },
   intro: {
-    eyebrow: "Project Launchpad",
     heading: { prefix: "Let’s build something ", accent: "powerful" },
     description:
       "A focused brief gives us the context to recommend the right creative and growth system for your brand.",
@@ -29,14 +26,22 @@ export const projectFormContent = {
         title: "No-obligation call",
         description: "We’ll recommend the clearest next step first."
       }
-    ],
-    images: {
-      dotGrid: { src: "/assets/images/form/brief-dot-grid.png", alt: "", width: 340, height: 230 } satisfies ImageContent,
-      geometry: { src: "/assets/images/form/brief-geometry.svg", alt: "", width: 1084, height: 772 } satisfies ImageContent,
-      orbits: { src: "/assets/images/form/brief-orbits.svg", alt: "", width: 482, height: 482 } satisfies ImageContent,
-      star: { src: "/assets/images/form/brief-star.webp", alt: "", width: 512, height: 512 } satisfies ImageContent,
-      gem: { src: "/assets/images/form/brief-gem.webp", alt: "", width: 512, height: 512 } satisfies ImageContent
-    }
+    ]
+  },
+  slate: {
+    ariaLabel: "Live summary of your brief",
+    production: "Production",
+    client: "Client",
+    services: "Services",
+    goal: "Goal",
+    timeline: "Timeline",
+    budget: "Budget",
+    scene: "Scene",
+    take: "Take",
+    date: "Date",
+    empty: "Not set yet",
+    brandFallback: "Your brand",
+    wrapped: "That’s a wrap"
   },
   progressAriaLabel: "Project brief progress",
   progressStepPrefix: "Step",
@@ -132,7 +137,7 @@ export const projectFormContent = {
   review: {
     kicker: "Final review",
     heading: { prefix: "Your brief is ", accent: "ready" },
-    description: "Review the essentials below. You can go back to edit anything before sending it to FRAMIO.",
+    description: "Check the essentials below. Use Edit to change anything before you send it.",
     labels: {
       name: "Name",
       brand: "Brand",
@@ -145,7 +150,8 @@ export const projectFormContent = {
     },
     emptyValue: "-",
     valueSeparator: " • ",
-    privacy: "Your information stays private and is used only to discuss your project."
+    privacy: "Your information stays private and is used only to discuss your project.",
+    editLabel: "Edit"
   },
   actions: {
     saved: "Progress saves on this device",
@@ -155,11 +161,11 @@ export const projectFormContent = {
     back: "Back",
     continue: "Continue",
     submit: "Send brief",
-    submitting: "Sending ···"
+    submitting: "Sending…"
   },
   success: {
     kicker: "Brief received",
-    heading: { prefix: "You’re in the ", accent: "FRAMIO pipeline" },
+    heading: { prefix: "That’s a wrap. ", accent: "Your brief is in." },
     description: "We’ll review your brief and contact you within 24 hours with the clearest next step.",
     homeLabel: "Back to FRAMIO",
     whatsappLabel: "WhatsApp us",
@@ -181,7 +187,7 @@ export const projectFormContent = {
     budgetRequired: "Select a budget range to continue.",
     submitFailed: "We couldn’t send your brief. Please try again or contact FRAMIO on WhatsApp."
   },
-  footer: ["© 2026 FRAMIO", "Hyderabad / India", "Creative × Growth × AI"],
+  footer: { legalName: "FRAMIO", items: ["Hyderabad, India", "Creative × Growth × AI"] },
   noScript: {
     prefix: "JavaScript is required for the multi-step project brief. Please email ",
     email: "framioagency.india@gmail.com"

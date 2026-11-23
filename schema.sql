@@ -47,6 +47,13 @@ BEFORE UPDATE ON "project_submissions"
 FOR EACH ROW
 EXECUTE FUNCTION "set_updated_at"();
 
+ALTER FUNCTION "set_updated_at"() SET search_path = '';
+
+-- Lock the table: only the site's server (service role, which bypasses RLS)
+-- may read or write briefs. The public anon key gets no access at all.
+ALTER TABLE "project_submissions" ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE "project_submissions" FROM anon, authenticated;
+
 
 -- ─── Grant admin role to an ops user ───────────────────────────────────────────
 -- After creating a user in Supabase dashboard (Authentication → Users → Add user),

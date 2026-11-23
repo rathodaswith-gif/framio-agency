@@ -4,10 +4,10 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { BrandsSection } from "@/components/sections/BrandsSection";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { PortfolioSection } from "@/components/sections/PortfolioSection";
 import { ProcessSection } from "@/components/sections/ProcessSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { StatsSection } from "@/components/sections/StatsSection";
+import { WorkReelSection } from "@/components/sections/WorkReelSection";
 
 export default function HomePage() {
   return (
@@ -18,10 +18,10 @@ export default function HomePage() {
         <ProcessSection />
         <ServicesSection />
         <StatsSection />
-        <PortfolioSection />
+        <WorkReelSection />
         <BrandsSection />
-        <SiteFooter />
       </main>
+      <SiteFooter />
       <MobileMenu />
       <HomeExperience />
     </>

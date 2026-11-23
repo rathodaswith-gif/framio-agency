@@ -13,7 +13,7 @@ export const navigationContent = {
     { label: "Work", href: "#work", section: "work", index: "01" },
     { label: "Services", href: "#services", section: "services", index: "02" },
     { label: "Process", href: "#process", section: "process", index: "03" },
-    { label: "Brands", href: "#about", section: "about", index: "04" }
+    { label: "Brands", href: "#brands", section: "brands", index: "04" }
   ] satisfies NavigationItem[],
   mobileMeta: ["Hyderabad, India", "Creative × Growth × AI"]
 } as const;

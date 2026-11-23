@@ -51,19 +51,29 @@ export interface SupportServiceContent {
 }
 
 export interface StatContent {
-  index: string;
+  /** Whole number shown on the rolling counter, e.g. 150. */
   value: number;
+  /** Text after the number, e.g. "+" or "M+". */
   suffix: string;
   label: string;
   description: string;
-  art: "red" | "blue";
+  /** Highlights this stat with the frame corners and light. Use on one item. */
   featured?: boolean;
 }
 
-export interface PortfolioItemContent {
+export interface WorkReelContent {
+  /** Short title shown under the playing reel, e.g. "Launch reel". */
   title: string;
-  caption: string;
-  image: ImageContent;
+  /** Client or brand name. Leave empty to hide it. */
+  client: string;
+  /** Kind of piece, e.g. "Reel", "Ad film", "Motion promo". */
+  format: string;
+  video: {
+    /** MP4 (H.264) in /public/assets/videos/work. Vertical 9:16 works best. */
+    src: AssetPath;
+    /** Still frame shown before the reel plays and on the side cards. */
+    poster?: AssetPath;
+  };
 }
 
 export interface FounderRoleContent {
@@ -74,14 +84,18 @@ export interface FounderRoleContent {
 
 export interface BrandContent {
   name: string;
-  image: ImageContent;
+  /** White, transparent version shown on the dark brand wall. */
+  mono: ImageContent;
+  /** Full-colour logo revealed when the plate comes forward. */
+  color: ImageContent;
+  /** Background colour of the colour logo, so the plate blends with it. */
+  background: string;
 }
 
 export type SocialIcon = "instagram" | "whatsapp" | "linkedin";
 
 export interface SocialLinkContent extends LinkContent {
   icon: SocialIcon;
-  className: string;
 }
 
 export interface TestimonialContent {

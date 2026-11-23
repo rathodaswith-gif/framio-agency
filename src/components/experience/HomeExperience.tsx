@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { FoundersExperience } from "./FoundersExperience";
 import { ProcessExperience } from "./ProcessExperience";
 import { ServicesExperience } from "./ServicesExperience";
+import { ShowcaseExperience } from "./ShowcaseExperience";
 
 function observeOnce(element: Element | null, threshold: number) {
   if (!element) return undefined;
@@ -37,8 +38,6 @@ export function HomeExperience() {
     let lastScrollY = window.scrollY;
     let headerScrollFrame = 0;
     let resizeTimer = 0;
-    let impactCountTimer = 0;
-    const counterFrames = new Set<number>();
 
     const loadFrame = window.requestAnimationFrame(() => body.classList.add("is-loaded"));
 
@@ -118,7 +117,7 @@ export function HomeExperience() {
     updateHeaderOnScroll();
 
     const navLinks = Array.from(document.querySelectorAll<HTMLElement>(".nav-link"));
-    const observedSections = ["work", "services", "process", "about"]
+    const observedSections = ["work", "services", "process", "brands"]
       .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => Boolean(section));
     const sectionObserver = new IntersectionObserver((entries) => {
@@ -129,67 +128,8 @@ export function HomeExperience() {
     observedSections.forEach((section) => sectionObserver.observe(section));
 
     const revealObservers = [
-      observeOnce(document.querySelector(".framio-process"), 0.2),
-      observeOnce(document.querySelector(".style-carousel-showcase"), 0.18),
-      observeOnce(document.querySelector(".brands-showcase"), 0.18),
-      observeOnce(document.querySelector(".framio-footer"), 0.16)
+      observeOnce(document.querySelector(".framio-process"), 0.2)
     ];
-
-    const impactShowcase = document.querySelector<HTMLElement>(".impact-showcase");
-    const impactBoard = document.querySelector<HTMLElement>(".impact-board");
-    let impactHasCounted = false;
-    const animateCounter = (counter: HTMLElement) => {
-      const target = Number(counter.dataset.target ?? 0);
-      const startTime = performance.now();
-      const stat = counter.closest(".impact-stat");
-      const update = (currentTime: number) => {
-        const progress = Math.min((currentTime - startTime) / 1450, 1);
-        const value = Math.round(target * (1 - Math.pow(1 - progress, 4)));
-        counter.textContent = value.toLocaleString("en-IN");
-        if (progress < 1) {
-          const id = window.requestAnimationFrame(update);
-          counterFrames.add(id);
-        } else {
-          counter.textContent = target.toLocaleString("en-IN");
-          stat?.classList.add("is-counted");
-        }
-      };
-      const id = window.requestAnimationFrame(update);
-      counterFrames.add(id);
-    };
-    let impactObserver: IntersectionObserver | undefined;
-    if (impactShowcase) {
-      impactObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          if (!impactHasCounted) {
-            impactHasCounted = true;
-            impactCountTimer = window.setTimeout(() => {
-              impactShowcase.querySelectorAll<HTMLElement>(".impact-counter").forEach(animateCounter);
-            }, 650);
-          }
-          observer.unobserve(entry.target);
-        });
-      }, { threshold: 0.24 });
-      impactObserver.observe(impactShowcase);
-    }
-
-    const finePointer = window.matchMedia("(pointer: fine)");
-    const handleImpactPointer = (event: PointerEvent) => {
-      if (!impactBoard) return;
-      const rect = impactBoard.getBoundingClientRect();
-      impactBoard.style.setProperty("--impact-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
-      impactBoard.style.setProperty("--impact-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
-    };
-    const resetImpactPointer = () => {
-      impactBoard?.style.setProperty("--impact-x", "50%");
-      impactBoard?.style.setProperty("--impact-y", "50%");
-    };
-    if (impactBoard && finePointer.matches) {
-      impactBoard.addEventListener("pointermove", handleImpactPointer, { passive: true });
-      impactBoard.addEventListener("pointerleave", resetImpactPointer);
-    }
 
     const mobileQuery = window.matchMedia("(max-width: 768px)");
     const mobileJourney = document.querySelector<HTMLElement>(".mobile-process-journey");
@@ -234,9 +174,7 @@ export function HomeExperience() {
       window.cancelAnimationFrame(loadFrame);
       if (headerScrollFrame) window.cancelAnimationFrame(headerScrollFrame);
       if (mobileFrame) window.cancelAnimationFrame(mobileFrame);
-      counterFrames.forEach((frame) => window.cancelAnimationFrame(frame));
       window.clearTimeout(resizeTimer);
-      window.clearTimeout(impactCountTimer);
       body.classList.remove("is-loaded", "menu-open");
       root.classList.remove("menu-open");
       window.removeEventListener("resize", handleResize);
@@ -246,9 +184,6 @@ export function HomeExperience() {
       window.removeEventListener("scroll", requestHeaderUpdate);
       sectionObserver.disconnect();
       revealObservers.forEach((observer) => observer?.disconnect());
-      impactObserver?.disconnect();
-      impactBoard?.removeEventListener("pointermove", handleImpactPointer);
-      impactBoard?.removeEventListener("pointerleave", resetImpactPointer);
       mobileStepObserver.disconnect();
       window.removeEventListener("scroll", requestMobileProcessUpdate);
       window.removeEventListener("resize", requestMobileProcessUpdate);
@@ -261,6 +196,7 @@ export function HomeExperience() {
       <ServicesExperience />
       <ProcessExperience />
       <FoundersExperience />
+      <ShowcaseExperience />
     </>
   );
 }
