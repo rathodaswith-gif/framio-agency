@@ -89,6 +89,23 @@ export interface HeroClipContent {
   };
 }
 
+export interface ManifestoContent {
+  heading: {
+    /** First line, stays grey. */
+    grey: string;
+    /** Second line, paints in with the ribbon colours on scroll. */
+    colour: string;
+  };
+  body: string;
+  image: {
+    alt: string;
+    /** Full artwork for tablets and desktops. */
+    wide: { src: AssetPath; srcSet: string; width: number; height: number };
+    /** Tighter crop (globe, cut, ribbon, hand) for phones. */
+    phone: { srcSet: string; width: number; height: number };
+  };
+}
+
 export interface FounderRoleContent {
   index: string;
   name: string;

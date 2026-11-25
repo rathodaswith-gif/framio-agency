@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { BrandsSection } from "@/components/sections/BrandsSection";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { ManifestoSection } from "@/components/sections/ManifestoSection";
 import { ProcessSection } from "@/components/sections/ProcessSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { StatsSection } from "@/components/sections/StatsSection";
@@ -20,6 +21,7 @@ export default function HomePage() {
         <StatsSection />
         <WorkReelSection />
         <BrandsSection />
+        <ManifestoSection />
       </main>
       <SiteFooter />
       <MobileMenu />

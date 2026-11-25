@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { siteContent } from "@/content/site";
 import "@/styles/home.css";
 import "@/styles/hero.css";
+import "@/styles/manifesto.css";
 import "@/styles/services.css";
 import "@/styles/founders.css";
 import "@/styles/process.css";

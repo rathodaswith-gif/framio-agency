@@ -1,0 +1,279 @@
+/* =====================================================
+   MANIFESTO — "We carve out colour."
+   A grey marble Earth; scrolling carves the colour ribbon out of it.
+   --paint, --fill and --zoom come from showcase/carve.ts. Their defaults
+   (1) are the finished state, so no-JS and reduced motion see full colour.
+====================================================== */
+
+.carve {
+  --paint: 1;
+  --fill: 1;
+  --zoom: 1;
+  --mx: 49.1%;
+  --my: 63.4%;
+  --carve-x: max(24px, calc((100% - 1320px) / 2));
+  --ribbon: linear-gradient(90deg, #ffa21c 0%, #f2582a 30%, #e3332c 50%, #5a3ff0 78%, #3d5bff 100%);
+  position: relative;
+  background: #000;
+  color: var(--white);
+}
+
+/* Blend into the near-black sections above and below */
+.carve::before,
+.carve::after {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  left: 0;
+  height: 120px;
+  content: "";
+  pointer-events: none;
+}
+
+.carve::before {
+  top: 0;
+  background: linear-gradient(180deg, var(--black), rgba(0, 0, 0, 0));
+}
+
+.carve::after {
+  bottom: 0;
+  background: linear-gradient(0deg, var(--black), rgba(0, 0, 0, 0));
+}
+
+.carve__track {
+  height: 210vh;
+}
+
+.carve__stage {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "title copy"
+    "art art";
+  align-items: end;
+  column-gap: clamp(32px, 5vw, 88px);
+  height: 100svh;
+  padding: 118px var(--carve-x) 28px;
+  overflow: hidden;
+}
+
+/* ---------- Words ---------- */
+
+.carve__title {
+  position: relative;
+  z-index: 2;
+  grid-area: title;
+  margin: 0;
+  font-family: var(--font-inter), Inter, "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(40px, 5.3vw, 88px);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.052em;
+}
+
+.carve__line {
+  display: block;
+}
+
+.carve__line--grey {
+  color: rgba(245, 241, 238, 0.4);
+}
+
+.carve__line--colour {
+  position: relative;
+  width: fit-content;
+  padding-bottom: 0.06em;
+}
+
+/* Unpainted: carved but still marble */
+.carve__base {
+  color: rgba(245, 241, 238, 0.14);
+}
+
+/* Paint layer, wiped in left to right with a soft wet edge */
+.carve__fill {
+  position: absolute;
+  inset: 0 0 0.06em;
+  background: var(--ribbon);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--fill) * 112% - 10%), transparent calc(var(--fill) * 112%));
+  mask-image: linear-gradient(90deg, #000 calc(var(--fill) * 112% - 10%), transparent calc(var(--fill) * 112%));
+}
+
+.carve__copy {
+  position: relative;
+  z-index: 2;
+  grid-area: copy;
+  max-width: 40ch;
+  margin: 0;
+  padding-bottom: 0.5em;
+  color: rgba(245, 241, 238, 0.72);
+  font-size: clamp(15px, 1.15vw, 18px);
+  font-weight: 500;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+/* ---------- The artwork ---------- */
+
+.carve__art {
+  --lx: 40%;
+  --ly: 40%;
+  position: relative;
+  grid-area: art;
+  align-self: center;
+  justify-self: center;
+  width: min(100%, calc((100svh - 300px) * 2.25));
+  aspect-ratio: 1881 / 836;
+  margin: 12px 0 0;
+  transform: scale(calc(1.07 - var(--zoom) * 0.07));
+  transform-origin: var(--mx) var(--my);
+  /* Feather every edge into the black so the frame disappears */
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 7%, #000 92%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 7%, #000 92%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.carve__layer,
+.carve__layer picture,
+.carve__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.carve__img {
+  object-fit: cover;
+}
+
+/* Underneath: the same artwork in pure marble grey */
+.carve__layer--grey .carve__img {
+  filter: grayscale(1) brightness(0.94) contrast(1.05);
+}
+
+/* On top: colour, carved outward from the knife cut */
+.carve__layer--colour {
+  -webkit-mask-image: radial-gradient(circle farthest-corner at var(--mx) var(--my), #000 calc(var(--paint) * 108% - 8%), transparent calc(var(--paint) * 108%));
+  mask-image: radial-gradient(circle farthest-corner at var(--mx) var(--my), #000 calc(var(--paint) * 108% - 8%), transparent calc(var(--paint) * 108%));
+}
+
+/* Studio light following the cursor across the marble */
+.carve__light {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--lx) var(--ly), rgba(255, 255, 255, 0.28), transparent 28%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms var(--ease-premium);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .carve__art:hover .carve__light {
+    opacity: 1;
+  }
+}
+
+/* ---------- Tablets ---------- */
+
+@media (max-width: 1100px) {
+  .carve__stage {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "title"
+      "copy"
+      "art";
+    align-content: center;
+    row-gap: 18px;
+  }
+
+  .carve__title {
+    font-size: clamp(40px, 6.4vw, 76px);
+  }
+
+  .carve__copy {
+    max-width: 52ch;
+  }
+
+  /* Wider than the text column: the artwork runs edge to edge */
+  .carve__art {
+    width: min(100vw, calc((100svh - 420px) * 2.25));
+  }
+}
+
+/* ---------- Phones: no pinning, the crop shows globe, cut, ribbon and hand ---------- */
+
+@media (max-width: 760px) {
+  .carve {
+    --mx: 36.3%;
+    --my: 63.4%;
+  }
+
+  .carve::before,
+  .carve::after {
+    height: 72px;
+  }
+
+  .carve__track {
+    height: auto;
+  }
+
+  .carve__stage {
+    position: relative;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "title"
+      "art"
+      "copy";
+    row-gap: 0;
+    height: auto;
+    padding: 88px 20px 80px;
+  }
+
+  .carve__title {
+    font-size: clamp(38px, 11vw, 56px);
+  }
+
+  .carve__art {
+    width: calc(100% + 40px);
+    aspect-ratio: 1250 / 836;
+    margin: 26px -20px 22px;
+  }
+
+  .carve__copy {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carve__track {
+    height: auto;
+  }
+
+  .carve__stage {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .carve__art {
+    transform: none;
+  }
+
+  .carve__light {
+    display: none;
+  }
+}

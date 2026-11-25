@@ -1,15 +1,14 @@
 /* =====================================================
-   HERO — "Viewfinder"
-   The hero is a camera monitor framing FRAMIO's own reels.
+   HERO
+   FRAMIO's own reels play in a 3D monitor beside the headline.
    Intro motion is CSS-only (runs from first paint, no JS needed).
-   Playback, timecode and clip switching: hero-viewfinder.ts
+   Playback, clip switching and pause: hero-viewfinder.ts
 ====================================================== */
 
 .vf {
   --vf-x: max(24px, calc((100% - 1400px) / 2));
   --vf-min: max(700px, 100svh);
-  --mon-h: clamp(360px, calc(100svh - 300px), 620px);
-  --rec: #ec2f2d;
+  --mon-h: clamp(360px, calc(100svh - 270px), 640px);
   position: relative;
   min-height: var(--vf-min);
   padding: 100px var(--vf-x) 24px;
@@ -55,171 +54,21 @@
   pointer-events: none;
 }
 
-/* ---------- The frame ---------- */
+/* ---------- Layout ---------- */
 
 .vf-frame {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto 1fr;
   min-height: calc(var(--vf-min) - 124px);
-  padding: 20px 34px 18px;
+  padding: 12px 34px 18px;
 }
 
-.vf-corner {
-  --cx: 0px;
-  --cy: 0px;
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  border: 0 solid rgba(245, 241, 238, 0.6);
-  pointer-events: none;
-  animation: vf-corner-in 1000ms var(--ease-premium) 120ms backwards;
-}
-
-.vf-corner--tl { top: 0; left: 0; --cx: -26px; --cy: -26px; border-top-width: 2px; border-left-width: 2px; }
-.vf-corner--tr { top: 0; right: 0; --cx: 26px; --cy: -26px; border-top-width: 2px; border-right-width: 2px; }
-.vf-corner--bl { bottom: 0; left: 0; --cx: -26px; --cy: 26px; border-bottom-width: 2px; border-left-width: 2px; }
-.vf-corner--br { bottom: 0; right: 0; --cx: 26px; --cy: 26px; border-bottom-width: 2px; border-right-width: 2px; }
-
-/* ---------- Camera chrome ---------- */
-
-.vf-top {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  animation: vf-fade 800ms var(--ease-premium) 650ms backwards;
-}
-
-.vf-rec {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  margin: -8px 0 -8px -12px;
-  padding: 8px 10px 8px 12px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  background: none;
-  color: var(--white);
-  font: inherit;
-  cursor: pointer;
-  outline: none;
-  transition:
-    border-color 240ms var(--ease-premium),
-    background-color 240ms var(--ease-premium);
-}
-
-.vf-rec:hover {
-  border-color: rgba(245, 241, 238, 0.16);
-  background: rgba(5, 5, 5, 0.42);
-}
-
-.vf-rec:focus-visible,
 .vf-secondary:focus-visible,
-.vf-clips button:focus-visible {
+.vf-clips button:focus-visible,
+.vf-pause:focus-visible {
   outline: 2px solid var(--yellow);
   outline-offset: 3px;
-}
-
-.vf-rec__dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--rec);
-  box-shadow: 0 0 12px rgba(236, 47, 45, 0.85);
-  animation: vf-blink 1.4s steps(1, end) infinite;
-}
-
-.vf-rec__label {
-  min-width: 3.4em;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-align: left;
-  text-transform: uppercase;
-}
-
-.vf-rec__tc {
-  color: rgba(245, 241, 238, 0.82);
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-}
-
-.vf-rec__icon {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  margin-left: 2px;
-  border: 1px solid rgba(245, 241, 238, 0.22);
-  border-radius: 50%;
-  color: rgba(245, 241, 238, 0.85);
-  transition: border-color 240ms, color 240ms;
-}
-
-.vf-rec:hover .vf-rec__icon {
-  border-color: var(--yellow);
-  color: var(--yellow);
-}
-
-.vf-rec__icon svg {
-  width: 12px;
-  height: 12px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-}
-
-.vf-rec__play {
-  display: none;
-  fill: currentColor !important;
-  stroke: none !important;
-}
-
-.vf.is-paused .vf-rec__pause { display: none; }
-.vf.is-paused .vf-rec__play { display: block; }
-
-.vf.is-paused .vf-rec__dot {
-  opacity: 0.35;
-  box-shadow: none;
-  animation: none;
-}
-
-.vf-now {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  min-width: 0;
-  margin: 0;
-  color: rgba(245, 241, 238, 0.56);
-  font-size: 13px;
-}
-
-.vf-now__num {
-  color: rgba(245, 241, 238, 0.85);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.vf-now__name {
-  overflow: hidden;
-  color: var(--white);
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.vf.is-racking .vf-now__num,
-.vf.is-racking .vf-now__name,
-.vf.is-racking .vf-now__format {
-  animation: vf-ink 520ms var(--ease-premium);
 }
 
 /* ---------- Stage: headline + monitor ---------- */
@@ -404,7 +253,6 @@
     0 0 0 1px rgba(245, 241, 238, 0.16),
     0 60px 120px -40px rgba(0, 0, 0, 0.95),
     0 0 120px -40px rgba(233, 255, 26, 0.14);
-  animation: vf-focus-pull 1500ms cubic-bezier(0.3, 0, 0.2, 1) 450ms backwards;
 }
 
 /* Glass highlight across the screen */
@@ -430,44 +278,22 @@
   opacity: 1;
 }
 
-.vf.is-racking .vf-video.is-active {
-  animation: vf-rack 700ms var(--ease-premium);
+/* Under the monitor: one progress segment per clip, then pause/play */
+.vf-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: calc(var(--mon-h) * 9 / 16);
+  animation: vf-fade 800ms var(--ease-premium) 1000ms backwards;
 }
 
-/* Focus brackets: hunt on load, lock in volt, re-lock on every cut */
-.vf-focus {
-  position: absolute;
-  inset: -16px;
-  pointer-events: none;
-  animation: vf-hunt 1400ms cubic-bezier(0.3, 0, 0.2, 1) 450ms backwards;
-}
-
-.vf-focus i {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  border: 0 solid var(--yellow);
-  animation: vf-lock 1400ms linear 450ms backwards;
-}
-
-.vf-focus i:nth-child(1) { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
-.vf-focus i:nth-child(2) { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
-.vf-focus i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
-.vf-focus i:nth-child(4) { right: 0; bottom: 0; border-right-width: 2px; border-bottom-width: 2px; }
-
-.vf.is-racking .vf-focus {
-  animation: vf-relock 700ms var(--ease-premium);
-}
-
-/* Clip progress, one segment per clip */
 .vf-clips {
   display: flex;
+  flex: 1;
   gap: 6px;
-  width: calc(var(--mon-h) * 9 / 16);
   margin: 0;
   padding: 0;
   list-style: none;
-  animation: vf-fade 800ms var(--ease-premium) 1000ms backwards;
 }
 
 .vf-clips li {
@@ -512,14 +338,46 @@
   background: rgba(245, 241, 238, 0.36);
 }
 
-/* ---------- Motion ---------- */
-
-@keyframes vf-corner-in {
-  from {
-    opacity: 0;
-    transform: translate(var(--cx), var(--cy));
-  }
+.vf-pause {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid rgba(245, 241, 238, 0.22);
+  border-radius: 50%;
+  background: rgba(5, 5, 5, 0.4);
+  color: rgba(245, 241, 238, 0.85);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 240ms, color 240ms;
 }
+
+.vf-pause:hover {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+.vf-pause svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.vf-pause__play {
+  display: none;
+  fill: currentColor !important;
+  stroke: none !important;
+}
+
+.vf.is-paused .vf-pause__pause { display: none; }
+.vf.is-paused .vf-pause__play { display: block; }
+
+/* ---------- Motion ---------- */
 
 @keyframes vf-fade {
   from { opacity: 0; }
@@ -536,18 +394,6 @@
   from { transform: translateY(108%); }
 }
 
-@keyframes vf-ink {
-  from {
-    opacity: 0;
-    filter: blur(4px);
-  }
-}
-
-@keyframes vf-blink {
-  0%, 60% { opacity: 1; }
-  61%, 100% { opacity: 0.2; }
-}
-
 @keyframes vf-monitor-in {
   from {
     opacity: 0;
@@ -555,50 +401,15 @@
   }
 }
 
-@keyframes vf-focus-pull {
-  from { filter: blur(16px) brightness(0.55); }
-  55% { filter: blur(6px) brightness(0.85); }
-}
-
-@keyframes vf-hunt {
-  0% { opacity: 0; transform: scale(1.22); }
-  25% { opacity: 1; transform: scale(0.93); }
-  48% { transform: scale(1.06); }
-  70% { transform: scale(0.985); }
-  100% { transform: scale(1); }
-}
-
-@keyframes vf-lock {
-  0%, 82% { border-color: rgba(245, 241, 238, 0.85); }
-  100% { border-color: var(--yellow); }
-}
-
-@keyframes vf-relock {
-  0% { transform: scale(1.08); }
-  45% { transform: scale(0.97); }
-  100% { transform: scale(1); }
-}
-
-@keyframes vf-rack {
-  from {
-    filter: blur(12px) brightness(1.15);
-    transform: scale(1.06);
-  }
-}
-
 /* ---------- Tablet ---------- */
 
 @media (max-width: 1100px) {
   .vf {
-    --mon-h: clamp(340px, calc(100svh - 300px), 520px);
+    --mon-h: clamp(340px, calc(100svh - 270px), 540px);
   }
 
   .vf-frame {
-    padding: 18px 26px 16px;
-  }
-
-  .vf-now__label {
-    display: none;
+    padding: 10px 26px 16px;
   }
 
   .vf-title {
@@ -624,43 +435,8 @@
   }
 
   .vf-frame {
-    grid-template-rows: auto 1fr;
     min-height: max(640px, 100svh);
     padding: 100px 20px calc(24px + env(safe-area-inset-bottom));
-  }
-
-  .vf-corner {
-    width: 22px;
-    height: 22px;
-  }
-
-  .vf-corner--tl, .vf-corner--tr { top: 12px; }
-  .vf-corner--bl, .vf-corner--br { bottom: 12px; }
-  .vf-corner--tl, .vf-corner--bl { left: 12px; }
-  .vf-corner--tr, .vf-corner--br { right: 12px; }
-
-  .vf-top {
-    gap: 12px;
-  }
-
-  .vf-rec {
-    gap: 9px;
-    margin-left: -8px;
-    padding: 6px 8px;
-  }
-
-  .vf-rec__tc {
-    font-size: 13px;
-  }
-
-  .vf-now {
-    gap: 8px;
-    font-size: 12px;
-  }
-
-  .vf-now__format,
-  .vf-now__num {
-    display: none;
   }
 
   .vf-stage {
@@ -669,12 +445,12 @@
     padding: 0;
   }
 
-  /* The monitor becomes the background, starting under the camera status row
-     so each reel's own top branding never collides with REC and the clip name. */
+  /* The monitor becomes the background, starting just under the progress bars
+     so each reel's own top branding never sits under the site header. */
   .vf-monitor-wrap {
     position: absolute;
     z-index: 0;
-    inset: 132px 0 0;
+    inset: 100px 0 0;
     display: block;
     margin: 0;
     perspective: none;
@@ -693,25 +469,30 @@
     box-shadow: none;
   }
 
-  /* Legibility: dark at the top for the chrome, darker at the bottom for the words */
+  /* Legibility: a soft top edge, then darker toward the bottom for the words */
   .vf-screen::after {
     background:
       linear-gradient(180deg, #060506 0%, rgba(6, 5, 6, 0) 12%, rgba(5, 5, 5, 0.06) 30%, rgba(5, 5, 5, 0.6) 48%, rgba(5, 5, 5, 0.9) 64%, #050505 100%);
   }
 
-  .vf-focus {
-    display: none;
-  }
-
-  /* Story-style progress bars just under the site header */
-  .vf-clips {
+  /* Story-style progress bars and pause just under the site header */
+  .vf-controls {
     position: absolute;
     z-index: 3;
-    top: -52px;
+    top: -30px;
     right: 20px;
     left: 20px;
     width: auto;
+    gap: 12px;
+  }
+
+  .vf-clips {
     gap: 5px;
+  }
+
+  .vf-pause {
+    width: 26px;
+    height: 26px;
   }
 
   .vf-clips button {
@@ -721,10 +502,6 @@
   .vf-clips__bar {
     height: 2.5px;
     background: rgba(245, 241, 238, 0.26);
-  }
-
-  .vf-top {
-    margin-top: 6px;
   }
 
   .vf-content {
@@ -759,10 +536,6 @@
 }
 
 @media (max-width: 380px) {
-  .vf-rec__icon {
-    display: none;
-  }
-
   .vf-title {
     font-size: 50px;
   }
@@ -775,7 +548,7 @@
   }
 
   .vf-frame {
-    padding-top: 16px;
+    padding-top: 8px;
     padding-bottom: 14px;
   }
 

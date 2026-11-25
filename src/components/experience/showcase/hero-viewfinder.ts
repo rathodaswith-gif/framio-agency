@@ -1,31 +1,16 @@
 /**
- * Hero viewfinder: plays the showreel clips one after another in the monitor,
- * runs the camera timecode, and handles the REC (pause) button, clip buttons
- * and the gentle tilt toward the cursor.
+ * Hero showreel: plays the clips one after another in the monitor, fills the
+ * progress bars, handles the clip buttons and the pause button, and tilts the
+ * monitor gently toward the cursor.
  *
  * Two <video> elements take turns, so the next clip is already loaded when
- * the current one ends and the cut has no black flash.
+ * the current one ends and the cut is a clean crossfade.
  * Plays only while the hero is on screen and the tab is visible. With reduced
  * motion or data saver it starts paused on the first still.
  */
 interface Clip {
   src: string;
   poster: string;
-  name: string;
-  format: string;
-}
-
-const FPS = 24;
-const pad = (value: number) => String(value).padStart(2, "0");
-
-function formatTimecode(ms: number): string {
-  const totalFrames = Math.floor((ms / 1000) * FPS);
-  const frames = totalFrames % FPS;
-  const totalSeconds = Math.floor(totalFrames / FPS);
-  const seconds = totalSeconds % 60;
-  const minutes = Math.floor(totalSeconds / 60) % 60;
-  const hours = 1 + Math.floor(totalSeconds / 3600);
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}:${pad(frames)}`;
 }
 
 export function initHeroViewfinder(root: HTMLElement): () => void {
@@ -33,21 +18,14 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
   const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-vf-clip]"));
   const ambient = Array.from(root.querySelectorAll<HTMLImageElement>("[data-vf-ambient]"));
   const toggle = root.querySelector<HTMLButtonElement>("[data-vf-toggle]");
-  const recLabel = root.querySelector<HTMLElement>("[data-vf-rec-label]");
-  const timecode = root.querySelector<HTMLElement>("[data-vf-timecode]");
-  const numLabel = root.querySelector<HTMLElement>("[data-vf-num]");
-  const nameLabel = root.querySelector<HTMLElement>("[data-vf-name]");
-  const formatLabel = root.querySelector<HTMLElement>("[data-vf-format]");
   const monitor = root.querySelector<HTMLElement>("[data-vf-monitor]");
   if (videos.length < 2 || !buttons.length || !toggle) return () => undefined;
+  const pauseButton = toggle;
 
   const clips: Clip[] = buttons.map((button) => ({
     src: button.dataset.src ?? "",
-    poster: button.dataset.poster ?? "",
-    name: button.dataset.name ?? "",
-    format: button.dataset.format ?? ""
+    poster: button.dataset.poster ?? ""
   }));
-  const total = pad(clips.length);
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
@@ -59,9 +37,6 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
   let userPaused = reducedMotion || saveData;
   let inView = true;
   let pageVisible = document.visibilityState !== "hidden";
-  let elapsed = 0;
-  let lastTick = 0;
-  let lastFrameText = "";
   let frame = 0;
   let tiltX = 0;
   let tiltY = 0;
@@ -89,10 +64,7 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
     video.load();
   };
 
-  const updateLabels = () => {
-    if (numLabel) numLabel.textContent = `${pad(index + 1)}/${total}`;
-    if (nameLabel) nameLabel.textContent = clips[index].name;
-    if (formatLabel) formatLabel.textContent = clips[index].format;
+  const updateClipState = () => {
     buttons.forEach((button, buttonIndex) => {
       const current = buttonIndex === index;
       button.classList.toggle("is-current", current);
@@ -104,16 +76,16 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
     ambient.forEach((image, imageIndex) => image.classList.toggle("is-active", imageIndex === index));
   };
 
-  const rackFocus = () => {
-    root.classList.remove("is-racking");
-    void root.offsetWidth; // restart the CSS animation
-    root.classList.add("is-racking");
-    later(() => root.classList.remove("is-racking"), 800);
-  };
+  function setPaused(paused: boolean) {
+    userPaused = paused;
+    root.classList.toggle("is-paused", paused);
+    pauseButton.setAttribute("aria-pressed", String(paused));
+    pauseButton.setAttribute("aria-label", (paused ? pauseButton.dataset.labelPlay : pauseButton.dataset.labelPause) ?? "");
+    apply();
+  }
 
   const playFront = () => {
-    const video = videos[front];
-    const attempt = video.play();
+    const attempt = videos[front].play();
     if (attempt) {
       attempt.catch((error: unknown) => {
         // Autoplay blocked (e.g. iOS Low Power Mode): show the paused state so people can press play.
@@ -137,10 +109,9 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
     next.classList.add("is-active");
     front = back;
     index = clipIndex;
-    updateLabels();
-    rackFocus();
+    updateClipState();
     if (isPlaying()) playFront();
-    // Once the cut has finished, park the old element on the clip after this one.
+    // Once the crossfade has finished, park the old element on the clip after this one.
     later(() => {
       previous.pause();
       if (previous !== videos[front]) load(previous, (index + 1) % clips.length, isPlaying() ? "auto" : "metadata");
@@ -152,19 +123,11 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
     show((index + 1) % clips.length);
   };
 
-  const tick = (now: number) => {
+  const tick = () => {
     frame = 0;
-    const delta = lastTick ? Math.min(now - lastTick, 100) : 0;
-    lastTick = now;
     const playing = isPlaying();
 
     if (playing) {
-      elapsed += delta;
-      const text = formatTimecode(elapsed);
-      if (timecode && text !== lastFrameText) {
-        timecode.textContent = text;
-        lastFrameText = text;
-      }
       const video = videos[front];
       if (video.duration > 0) {
         buttons[index]?.style.setProperty("--p", Math.min(1, video.currentTime / video.duration).toFixed(4));
@@ -181,29 +144,19 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
     }
 
     if (playing || tilting) frame = window.requestAnimationFrame(tick);
-    else lastTick = 0;
   };
 
   const requestTick = () => {
     if (!frame) frame = window.requestAnimationFrame(tick);
   };
 
-  const apply = () => {
+  function apply() {
     if (isPlaying()) {
       playFront();
       requestTick();
     } else {
       videos.forEach((video) => video.pause());
     }
-  };
-
-  function setPaused(paused: boolean) {
-    userPaused = paused;
-    root.classList.toggle("is-paused", paused);
-    toggle!.setAttribute("aria-pressed", String(paused));
-    toggle!.setAttribute("aria-label", (paused ? toggle!.dataset.labelPlay : toggle!.dataset.labelPause) ?? "");
-    if (recLabel) recLabel.textContent = (paused ? toggle!.dataset.textPaused : toggle!.dataset.textRec) ?? "";
-    apply();
   }
 
   const handleToggle = () => setPaused(!userPaused);
@@ -240,18 +193,16 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
     }, { threshold: 0.05 })
     : null;
 
-  // Wire up
   videos.forEach((video) => video.addEventListener("ended", handleEnded));
   buttons.forEach((button) => button.addEventListener("click", handleClip));
-  toggle.addEventListener("click", handleToggle);
+  pauseButton.addEventListener("click", handleToggle);
   root.addEventListener("pointermove", handlePointerMove, { passive: true });
   root.addEventListener("pointerleave", handlePointerLeave);
   document.addEventListener("visibilitychange", handleVisibility);
   observer?.observe(root);
 
   videos[0].dataset.clip = "0";
-  updateLabels();
-  root.classList.add("is-ready");
+  updateClipState();
   if (userPaused) {
     setPaused(true);
   } else {
@@ -268,11 +219,11 @@ export function initHeroViewfinder(root: HTMLElement): () => void {
       video.pause();
     });
     buttons.forEach((button) => button.removeEventListener("click", handleClip));
-    toggle.removeEventListener("click", handleToggle);
+    pauseButton.removeEventListener("click", handleToggle);
     root.removeEventListener("pointermove", handlePointerMove);
     root.removeEventListener("pointerleave", handlePointerLeave);
     document.removeEventListener("visibilitychange", handleVisibility);
     observer?.disconnect();
-    root.classList.remove("is-ready", "is-racking", "is-paused");
+    root.classList.remove("is-paused");
   };
 }

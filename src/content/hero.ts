@@ -1,7 +1,7 @@
 import type { HeroClipContent, ImageContent } from "@/types/content";
 
 /**
- * The hero is a camera viewfinder playing a showreel of FRAMIO's own work.
+ * The hero plays a showreel of FRAMIO's own work in a 3D monitor.
  *
  * To change the showreel:
  * 1. Put a short vertical clip (about 6 s, 9:16, H.264, no audio, under ~1 MB)
@@ -26,13 +26,9 @@ export const heroContent = {
   secondaryCta: "VIEW OUR WORK",
   reel: {
     ariaLabel: "FRAMIO showreel",
-    rec: "REC",
-    paused: "Paused",
     pause: "Pause showreel",
     play: "Play showreel",
-    nowPlaying: "Now playing",
     showClip: "Show clip",
-    watch: "Watch the full reels",
     clips: [
       {
         name: "Grand opening promo",
